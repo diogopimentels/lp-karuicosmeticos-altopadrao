@@ -146,12 +146,20 @@ export async function upsertPersonInAgendor(
 export async function createDealInAgendor(params: {
   personId: number;
   nomeCompleto: string;
+  emailProfissional: string;
   description: string;
 }): Promise<AgendorDeal> {
+  // Título único por envio — o Agendor bloqueia negócio repetido com o mesmo título
+  const stamp = new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date());
+
   return agendorFetch<AgendorDeal>(`/people/${params.personId}/deals`, {
     method: "POST",
     body: JSON.stringify({
-      title: `${getLeadOrigin()} — ${params.nomeCompleto}`,
+      title: `${getLeadOrigin()} — ${params.nomeCompleto} — ${stamp}`,
       description: params.description,
       funnel: getFunnelId(),
       dealStage: getDealStage(),
@@ -159,24 +167,43 @@ export async function createDealInAgendor(params: {
   });
 }
 
+function isDuplicateDealTitleError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /only be one deal with this title/i.test(message);
+}
+
 export async function registerLeadInAgendor(
   lead: AgendorLeadInput,
-): Promise<{ personId: number; dealId: number }> {
+): Promise<{ personId: number; dealId: number | null }> {
   const person = await upsertPersonInAgendor(lead);
 
   if (!person?.id) {
     throw new Error("Agendor não retornou o ID da pessoa.");
   }
 
-  const deal = await createDealInAgendor({
-    personId: person.id,
-    nomeCompleto: lead.nomeCompleto,
-    description: buildDescription(lead),
-  });
+  try {
+    const deal = await createDealInAgendor({
+      personId: person.id,
+      nomeCompleto: lead.nomeCompleto,
+      emailProfissional: lead.emailProfissional,
+      description: buildDescription(lead),
+    });
 
-  if (!deal?.id) {
-    throw new Error("Agendor não retornou o ID do negócio.");
+    if (!deal?.id) {
+      throw new Error("Agendor não retornou o ID do negócio.");
+    }
+
+    return { personId: person.id, dealId: deal.id };
+  } catch (error) {
+    // Reenvio do mesmo lead: pessoa já existe e o negócio também.
+    // Não derruba o fluxo depois do Sheets.
+    if (isDuplicateDealTitleError(error)) {
+      console.warn(
+        "Agendor: negócio duplicado para a pessoa; seguindo com sucesso.",
+        { personId: person.id },
+      );
+      return { personId: person.id, dealId: null };
+    }
+    throw error;
   }
-
-  return { personId: person.id, dealId: deal.id };
 }

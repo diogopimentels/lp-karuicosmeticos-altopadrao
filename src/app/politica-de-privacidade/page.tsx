@@ -199,10 +199,15 @@ export default function PrivacyPolicyPage() {
               8. Cookies e mensuração
             </h2>
             <p>
-              Esta versão da landing page não utiliza trackers de marketing
-              sem configuração e autorização específicas da Karuí. Caso
-              ferramentas de mensuração sejam adicionadas no futuro, esta
-              política será atualizada.
+              Esta landing page utiliza o Meta Pixel (Facebook) para medir
+              visualizações de página e conversões de lead quando o formulário
+              é enviado com sucesso. Esses dados ajudam a entender o desempenho
+              das campanhas e a otimizar anúncios na Meta.
+            </p>
+            <p>
+              O tratamento ocorre conforme as configurações da conta de anúncios
+              da Karuí e as políticas da Meta. Você pode gerenciar preferências
+              de anúncios também pelos controles da própria Meta.
             </p>
           </section>
 

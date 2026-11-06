@@ -34,6 +34,7 @@ Configure no `.env.local` (local) e na Vercel (produção):
 | `AGENDOR_FUNNEL_ID` | server | Funil destino (padrão: `813360` FUNIL LP TERCEIRIZADA) |
 | `AGENDOR_DEAL_STAGE` | server | Etapa inicial do funil (padrão: `1` = OPORTUNIDADE) |
 | `AGENDOR_LEAD_ORIGIN` | server | Origem do lead (padrão: `Landing Page Karuí Cosméticos/Alto Padrão Invisível`) |
+| `NEXT_PUBLIC_FACEBOOK_PIXEL_ID` | client | ID do Meta Pixel (`PageView` + `Lead` no formulário) |
 
 Nunca use prefixo `NEXT_PUBLIC_` nas credenciais do Google/Agendor. Nunca commite o JSON da Service Account.
 

@@ -29,9 +29,27 @@ function getPrivateKey(): string {
   return key.includes("\\n") ? key.replace(/\\n/g, "\n") : key;
 }
 
+function quoteSheetName(sheetName: string): string {
+  return `'${sheetName.replace(/'/g, "''")}'`;
+}
+
+/** Primeira linha vazia na coluna A após o cabeçalho (reaproveita buracos). */
+function findNextDataRow(columnA: string[][] | null | undefined): number {
+  const values = columnA ?? [];
+
+  for (let index = 1; index < values.length; index += 1) {
+    const cell = String(values[index]?.[0] ?? "").trim();
+    if (!cell) {
+      return index + 1;
+    }
+  }
+
+  return Math.max(values.length + 1, 2);
+}
+
 export async function appendLeadToSheet(lead: LeadRow): Promise<void> {
   const spreadsheetId = requireEnv("GOOGLE_SHEETS_SPREADSHEET_ID");
-  const sheetName = process.env.GOOGLE_SHEETS_SHEET_NAME || "Leads";
+  const sheetName = process.env.GOOGLE_SHEETS_SHEET_NAME || "Página1";
   const clientEmail = requireEnv("GOOGLE_SERVICE_ACCOUNT_EMAIL");
   const privateKey = getPrivateKey();
 
@@ -42,12 +60,28 @@ export async function appendLeadToSheet(lead: LeadRow): Promise<void> {
   });
 
   const sheets = google.sheets({ version: "v4", auth });
+  const quotedSheetName = quoteSheetName(sheetName);
 
-  await sheets.spreadsheets.values.append({
+  // Evita o bug do values.append, que pode "detectar tabela" e gravar
+  // a partir da coluna J em vez da coluna A.
+  // Só a coluna A decide a próxima linha — ignora lixo antigo em J:T
+  const existing = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `${sheetName}!A:K`,
+    range: `${quotedSheetName}!A1:A500`,
+  });
+
+  const nextRow = findNextDataRow(existing.data.values);
+  const origem =
+    process.env.AGENDOR_LEAD_ORIGIN?.replace(/^"|"$/g, "").trim() ||
+    "Landing Page Karuí Cosméticos/Alto Padrão Invisível";
+
+  // Cabeçalhos atuais da planilha:
+  // Data/horário | Nome completo | E-mail | Whatsapp | Origem | UTM Source | UTM Campaign
+  // + campos extras úteis à direita
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `${quotedSheetName}!A${nextRow}`,
     valueInputOption: "USER_ENTERED",
-    insertDataOption: "INSERT_ROWS",
     requestBody: {
       values: [
         [
@@ -55,9 +89,10 @@ export async function appendLeadToSheet(lead: LeadRow): Promise<void> {
           lead.nomeCompleto,
           lead.emailProfissional,
           lead.whatsappLead,
+          origem,
           lead.utmSource ?? "",
-          lead.utmMedium ?? "",
           lead.utmCampaign ?? "",
+          lead.utmMedium ?? "",
           lead.utmTerm ?? "",
           lead.utmContent ?? "",
           lead.paginaOrigem ?? "",

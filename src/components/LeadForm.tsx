@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from "react";
 
+import { trackLeadConversion } from "@/lib/meta-pixel";
+
 type FieldErrors = Partial<
   Record<"nomeCompleto" | "emailProfissional" | "whatsappLead", string[]>
 >;
@@ -28,11 +30,42 @@ export function LeadForm() {
 
   const isLoading = status === "loading";
 
+  function showClientErrors(errors: FieldErrors, message: string) {
+    setFieldErrors(errors);
+    setFormError(message);
+    setStatus("error");
+    document.getElementById("formulario")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("loading");
     setFormError(null);
     setFieldErrors({});
+
+    const localErrors: FieldErrors = {};
+    if (nomeCompleto.trim().length < 3) {
+      localErrors.nomeCompleto = ["Informe seu nome completo."];
+    } else if (!/^[\p{L}\p{M}'’.\-\s]+$/u.test(nomeCompleto.trim())) {
+      localErrors.nomeCompleto = ["Use apenas letras e espaços no nome."];
+    }
+    if (!emailProfissional.trim().includes("@")) {
+      localErrors.emailProfissional = ["Informe um e-mail profissional válido."];
+    }
+    const phoneDigits = whatsappLead.replace(/\D/g, "");
+    if (phoneDigits.length < 10 || phoneDigits.length > 13) {
+      localErrors.whatsappLead = [
+        "Informe um WhatsApp com DDD (10 a 13 dígitos).",
+      ];
+    }
+
+    if (Object.keys(localErrors).length > 0) {
+      showClientErrors(localErrors, "Revise os campos do formulário.");
+      return;
+    }
 
     try {
       const response = await fetch("/api/leads", {
@@ -61,29 +94,29 @@ export function LeadForm() {
       };
 
       if (!response.ok || !payload.ok) {
-        setFieldErrors(payload.fieldErrors ?? {});
-        setFormError(
+        showClientErrors(
+          payload.fieldErrors ?? {},
           payload.message ??
             "Não foi possível enviar agora. Tente novamente em instantes.",
         );
-        setStatus("error");
         return;
       }
 
       if (!payload.whatsappUrl) {
-        setFormError(
+        showClientErrors(
+          {},
           "Não foi possível abrir o WhatsApp agora. Tente novamente em instantes.",
         );
-        setStatus("error");
         return;
       }
 
+      await trackLeadConversion();
       window.location.assign(payload.whatsappUrl);
     } catch {
-      setFormError(
+      showClientErrors(
+        {},
         "Falha de conexão. Verifique sua internet e tente novamente.",
       );
-      setStatus("error");
     }
   }
 
@@ -194,21 +227,24 @@ export function LeadForm() {
             ) : null}
           </div>
 
-          {/* Honeypot anti-spam — manter oculto */}
-          <div aria-hidden className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
-            <label htmlFor="website">Website</label>
-            <input
-              id="website"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              value={website}
-              onChange={(event) => setWebsite(event.target.value)}
-            />
-          </div>
+          {/* Honeypot anti-spam — nunca exibir na UI */}
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+            aria-hidden="true"
+            className="absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+          />
 
           {formError ? (
-            <p role="alert" className="text-sm leading-relaxed text-danger">
+            <p
+              role="alert"
+              className="border border-danger/40 bg-danger/10 px-3 py-3 text-sm leading-relaxed text-danger"
+            >
               {formError}
             </p>
           ) : null}
