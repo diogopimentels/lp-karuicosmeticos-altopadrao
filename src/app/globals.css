@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #080807;
+  --charcoal: #12110f;
+  --stone: #1a1815;
+  --mist: #2a2621;
+  --gold: #c6a56a;
+  --gold-deep: #9d7d45;
+  --gold-soft: rgba(198, 165, 106, 0.18);
+  --ivory: #f4efe6;
+  --muted: #9f978b;
+  --danger: #d9897a;
+  --success: #8faf8a;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
+  --color-stone: var(--stone);
+  --color-mist: var(--mist);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-ivory: var(--ivory);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--gold-soft);
+  color: var(--ivory);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.marble-surface {
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 78% 42%, rgba(198, 165, 106, 0.08), transparent 58%),
+    radial-gradient(ellipse 50% 40% at 12% 18%, rgba(255, 248, 235, 0.04), transparent 55%),
+    linear-gradient(160deg, #0c0b0a 0%, #141210 42%, #0a0908 100%);
+}
+
+.marble-veins {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 800 800' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(198, 165, 106, 0.03) 46%,
+      transparent 54%,
+      transparent 100%
+    );
+}
+
+.gold-button {
+  background: linear-gradient(135deg, #d4b57a 0%, #c6a56a 42%, #9d7d45 100%);
+  color: #1a140c;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.gold-button:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 10px 28px rgba(198, 165, 106, 0.18);
+}
+
+.gold-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.gold-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid rgba(244, 239, 230, 0.14);
+  background: rgba(8, 8, 7, 0.45);
+  color: var(--ivory);
+  border-radius: 0;
+  padding: 0.95rem 1rem;
+  font: inherit;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.field-input::placeholder {
+  color: rgba(159, 151, 139, 0.7);
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: rgba(198, 165, 106, 0.7);
+  background: rgba(8, 8, 7, 0.7);
+}
+
+.field-input[aria-invalid="true"] {
+  border-color: rgba(217, 137, 122, 0.8);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: reveal-up 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal-delay-1 {
+  animation-delay: 120ms;
+}
+
+.reveal-delay-2 {
+  animation-delay: 240ms;
+}
+
+.reveal-delay-3 {
+  animation-delay: 380ms;
+}
+
+.reveal-delay-4 {
+  animation-delay: 520ms;
+}
+
+@keyframes reveal-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-breathe {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+.portrait-glow {
+  animation: soft-breathe 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .reveal-delay-1,
+  .reveal-delay-2,
+  .reveal-delay-3,
+  .reveal-delay-4 {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .portrait-glow {
+    animation: none;
+  }
+
+  .gold-button:hover:not(:disabled) {
+    transform: none;
+  }
+}
