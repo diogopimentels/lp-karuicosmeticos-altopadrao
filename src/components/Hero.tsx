@@ -44,7 +44,7 @@ export function Hero() {
               href="#formulario"
               className="gold-button inline-flex min-h-12 items-center justify-center px-7 text-[0.72rem] font-semibold uppercase tracking-[0.18em]"
             >
-              Quero elevar o padrão
+              Quero elevar o padrão da minha marca
             </a>
           </div>
         </div>
