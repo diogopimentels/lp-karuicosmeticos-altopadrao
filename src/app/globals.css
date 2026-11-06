@@ -84,6 +84,15 @@ img {
     );
 }
 
+/* Full-width justified copy: flush left/right edges, last line left. */
+.text-fill {
+  width: 100%;
+  max-width: none;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+}
+
 .gold-button {
   background: linear-gradient(135deg, #d4b57a 0%, #c6a56a 42%, #9d7d45 100%);
   color: #1a140c;

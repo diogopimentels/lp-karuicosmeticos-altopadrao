@@ -28,11 +28,11 @@ export function Benefits() {
       className="border-t border-ivory/8 bg-charcoal px-6 py-24 md:px-10 lg:px-12"
     >
       <div className="mx-auto w-full max-w-7xl">
-        <div className="w-full max-w-none md:max-w-2xl">
-          <h2 className="w-full max-w-none font-display text-3xl leading-snug tracking-[-0.02em] text-ivory md:text-4xl">
+        <div className="w-full">
+          <h2 className="text-fill font-display text-3xl leading-snug tracking-[-0.02em] text-ivory md:text-4xl">
             O que o marketing olfativo pode fazer pela sua marca
           </h2>
-          <p className="mt-4 w-full max-w-none text-base leading-relaxed text-muted">
+          <p className="text-fill mt-4 text-base leading-relaxed text-muted">
             Uma presença aromática bem conduzida reforça a experiência no ponto
             de venda, fortalece a marca e aproxima o cliente da decisão de
             compra.
@@ -48,10 +48,10 @@ export function Benefits() {
               <p className="font-sans text-[0.68rem] tracking-[0.28em] text-gold uppercase">
                 {String(index + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-4 w-full max-w-none font-display text-[1.55rem] leading-snug text-ivory md:text-[1.7rem]">
+              <h3 className="text-fill mt-4 font-display text-[1.55rem] leading-snug text-ivory md:text-[1.7rem]">
                 {benefit.title}
               </h3>
-              <p className="mt-3 w-full max-w-none text-[0.98rem] leading-relaxed text-muted">
+              <p className="text-fill mt-3 text-[0.98rem] leading-relaxed text-muted">
                 {benefit.description}
               </p>
             </li>
