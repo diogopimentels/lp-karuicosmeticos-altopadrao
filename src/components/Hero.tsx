@@ -26,7 +26,7 @@ export function Hero() {
 
       <div className="relative mx-auto grid min-h-[100svh] w-full max-w-7xl grid-cols-1 items-end gap-8 px-6 pb-16 pt-36 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-6 md:px-10 md:pb-20 md:pt-28 lg:px-12">
         <div className="relative z-10 w-full max-w-none md:max-w-xl">
-          <p className="reveal w-full whitespace-nowrap text-center font-sans text-[clamp(0.56rem,2.85vw,0.72rem)] font-medium uppercase tracking-[0.18em] text-gold">
+          <p className="reveal w-full whitespace-nowrap text-center font-sans text-[clamp(0.68rem,3.2vw,0.85rem)] font-medium uppercase tracking-[0.18em] text-gold">
             Marketing Olfativo de Alto Padrão
           </p>
 
