@@ -39,10 +39,10 @@ export function Hero() {
             o valor percebido da sua marca. Terceirize com a excelência Karuí.
           </p>
 
-          <div className="reveal reveal-delay-3 mt-10">
+          <div className="reveal reveal-delay-3 mt-10 w-full">
             <a
               href="#formulario"
-              className="gold-button inline-flex min-h-12 items-center justify-center px-7 text-center text-[0.72rem] font-semibold uppercase tracking-[0.18em]"
+              className="gold-button flex min-h-13 w-full items-center justify-center px-6 text-center text-[0.7rem] font-semibold uppercase tracking-[0.16em]"
             >
               Quero elevar o padrão da
               <br />
