@@ -254,9 +254,15 @@ export function LeadForm() {
             disabled={isLoading}
             className="gold-button mt-2 flex min-h-13 w-full items-center justify-center px-6 text-center text-[0.7rem] font-semibold tracking-[0.16em] uppercase"
           >
-            {isLoading
-              ? "Enviando..."
-              : "Quero elevar o padrão da minha marca"}
+            {isLoading ? (
+              "Enviando..."
+            ) : (
+              <>
+                Quero elevar o padrão da
+                <br />
+                minha marca
+              </>
+            )}
           </button>
 
           <p className="text-[0.78rem] leading-relaxed text-muted">
