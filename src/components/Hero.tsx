@@ -25,16 +25,18 @@ export function Hero() {
       <Header />
 
       <div className="relative mx-auto grid min-h-[100svh] w-full max-w-7xl grid-cols-1 items-end gap-8 px-6 pb-16 pt-36 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-center md:gap-6 md:px-10 md:pb-20 md:pt-28 lg:px-12">
-        <div className="relative z-10 max-w-xl">
-          <p className="reveal font-sans text-[0.72rem] font-medium uppercase tracking-[0.32em] text-gold">
-            Marketing Olfativo de Alto Padrão
+        <div className="relative z-10 w-full max-w-xl">
+          <p className="reveal w-full text-center font-sans text-[0.72rem] font-medium uppercase leading-relaxed tracking-[0.28em] text-gold">
+            Marketing Olfativo
+            <br />
+            de Alto Padrão
           </p>
 
-          <h1 className="reveal reveal-delay-1 mt-6 font-display text-[2.55rem] leading-[1.05] tracking-[-0.02em] text-ivory sm:text-[3.15rem] lg:text-[3.7rem]">
+          <h1 className="reveal reveal-delay-1 mt-6 w-full text-balance font-display text-[2.55rem] leading-[1.08] tracking-[-0.02em] text-ivory sm:text-[3.15rem] lg:text-[3.55rem]">
             O seu olho não vê, mas o seu cérebro já comprou.
           </h1>
 
-          <p className="reveal reveal-delay-2 mt-6 max-w-md text-[1.02rem] leading-relaxed text-muted md:text-[1.08rem]">
+          <p className="reveal reveal-delay-2 mt-6 w-full text-[1.02rem] leading-relaxed text-muted md:text-[1.08rem]">
             Descubra a estratégia de Marketing Olfativo de Alto Padrão que eleva
             o valor percebido da sua marca. Terceirize com a excelência Karuí.
           </p>

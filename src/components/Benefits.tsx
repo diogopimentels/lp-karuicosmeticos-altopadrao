@@ -27,31 +27,31 @@ export function Benefits() {
       id="beneficios"
       className="border-t border-ivory/8 bg-charcoal px-6 py-24 md:px-10 lg:px-12"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="max-w-2xl">
-          <h2 className="font-display text-3xl tracking-[-0.02em] text-ivory md:text-4xl">
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="w-full max-w-2xl">
+          <h2 className="w-full text-balance font-display text-3xl leading-snug tracking-[-0.02em] text-ivory md:text-4xl">
             O que o marketing olfativo pode fazer pela sua marca
           </h2>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
+          <p className="mt-4 w-full text-base leading-relaxed text-muted">
             Uma presença aromática bem conduzida reforça a experiência no ponto
             de venda, fortalece a marca e aproxima o cliente da decisão de
             compra.
           </p>
         </div>
 
-        <ul className="mt-16 grid gap-x-12 gap-y-12 md:grid-cols-2">
+        <ul className="mt-16 grid w-full gap-x-12 gap-y-12 md:grid-cols-2">
           {benefits.map((benefit, index) => (
             <li
               key={benefit.title}
-              className="border-t border-gold/25 pt-7"
+              className="w-full border-t border-gold/25 pt-7"
             >
               <p className="font-sans text-[0.68rem] tracking-[0.28em] text-gold uppercase">
                 {String(index + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-4 font-display text-[1.55rem] leading-snug text-ivory md:text-[1.7rem]">
+              <h3 className="mt-4 w-full text-balance font-display text-[1.55rem] leading-snug text-ivory md:text-[1.7rem]">
                 {benefit.title}
               </h3>
-              <p className="mt-3 max-w-md text-[0.98rem] leading-relaxed text-muted">
+              <p className="mt-3 w-full text-[0.98rem] leading-relaxed text-muted">
                 {benefit.description}
               </p>
             </li>

@@ -126,11 +126,11 @@ export function LeadForm() {
       className="border-t border-ivory/8 bg-ink px-6 py-24 md:px-10 lg:px-12"
     >
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-        <div>
-          <h2 className="font-display text-3xl tracking-[-0.02em] text-ivory md:text-4xl">
+        <div className="w-full">
+          <h2 className="w-full text-balance font-display text-3xl tracking-[-0.02em] text-ivory md:text-4xl">
             Eleve o padrão olfativo da sua marca
           </h2>
-          <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
+          <p className="mt-4 w-full text-base leading-relaxed text-muted">
             Preencha os dados abaixo. Assim que o cadastro for confirmado, você
             será direcionado ao WhatsApp comercial da Karuí.
           </p>
