@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     icon: "/images/logo.png",
     apple: "/images/logo.png",
   },
+  other: {
+    "facebook-domain-verification": "stn4gryf1apuhjgo3ey0yoi38uvgqd",
+  },
   openGraph: {
     title: "Karuí Cosméticos | Marketing Olfativo de Alto Padrão",
     description:
