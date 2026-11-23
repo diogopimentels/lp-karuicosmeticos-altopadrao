@@ -4,17 +4,11 @@ import type { NextRequest } from "next/server";
 const COOKIE_NAME = "karui_preview";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
-function isMaintenanceOn() {
-  return process.env.MAINTENANCE === "true";
-}
-
 function getBypassToken() {
-  return process.env.MAINTENANCE_BYPASS_TOKEN ?? "";
+  return (process.env.MAINTENANCE_BYPASS_TOKEN ?? "").trim();
 }
 
 function hasValidBypass(request: NextRequest, token: string) {
-  if (!token) return false;
-
   const preview = request.nextUrl.searchParams.get("preview");
   if (preview === token) return true;
 
@@ -35,17 +29,18 @@ function setBypassCookie(response: NextResponse, token: string, secure: boolean)
 }
 
 export function proxy(request: NextRequest) {
-  if (!isMaintenanceOn()) {
+  // Token set → maintenance on. Empty/missing → site normal.
+  const token = getBypassToken();
+  if (!token) {
     return NextResponse.next();
   }
 
-  const token = getBypassToken();
   const { pathname } = request.nextUrl;
   const secure = request.nextUrl.protocol === "https:";
   const previewParam = request.nextUrl.searchParams.get("preview");
 
   // First visit with ?preview=TOKEN → set cookie and strip the query.
-  if (token && previewParam === token) {
+  if (previewParam === token) {
     const cleanUrl = request.nextUrl.clone();
     cleanUrl.searchParams.delete("preview");
     const response = NextResponse.redirect(cleanUrl);
@@ -55,10 +50,7 @@ export function proxy(request: NextRequest) {
 
   if (hasValidBypass(request, token)) {
     const response = NextResponse.next();
-    // Refresh cookie while browsing with a valid session.
-    if (token) {
-      setBypassCookie(response, token, secure);
-    }
+    setBypassCookie(response, token, secure);
     return response;
   }
 
