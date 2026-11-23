@@ -4,22 +4,24 @@ import type { NextRequest } from "next/server";
 const COOKIE_NAME = "karui_preview";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
-function getBypassToken() {
-  return (process.env.MAINTENANCE_BYPASS_TOKEN ?? "").trim();
-}
+// Flip to false and redeploy to reopen the public site.
+const MAINTENANCE_ENABLED = true;
 
-function hasValidBypass(request: NextRequest, token: string) {
+// Secret for ?preview=... — keep private; change anytime.
+const BYPASS_TOKEN = "karui-bypass-a7f3e9c2";
+
+function hasValidBypass(request: NextRequest) {
   const preview = request.nextUrl.searchParams.get("preview");
-  if (preview === token) return true;
+  if (preview === BYPASS_TOKEN) return true;
 
   const cookie = request.cookies.get(COOKIE_NAME)?.value;
-  return cookie === token;
+  return cookie === BYPASS_TOKEN;
 }
 
-function setBypassCookie(response: NextResponse, token: string, secure: boolean) {
+function setBypassCookie(response: NextResponse, secure: boolean) {
   response.cookies.set({
     name: COOKIE_NAME,
-    value: token,
+    value: BYPASS_TOKEN,
     httpOnly: true,
     secure,
     sameSite: "lax",
@@ -29,9 +31,7 @@ function setBypassCookie(response: NextResponse, token: string, secure: boolean)
 }
 
 export function proxy(request: NextRequest) {
-  // Token set → maintenance on. Empty/missing → site normal.
-  const token = getBypassToken();
-  if (!token) {
+  if (!MAINTENANCE_ENABLED) {
     return NextResponse.next();
   }
 
@@ -40,17 +40,17 @@ export function proxy(request: NextRequest) {
   const previewParam = request.nextUrl.searchParams.get("preview");
 
   // First visit with ?preview=TOKEN → set cookie and strip the query.
-  if (previewParam === token) {
+  if (previewParam === BYPASS_TOKEN) {
     const cleanUrl = request.nextUrl.clone();
     cleanUrl.searchParams.delete("preview");
     const response = NextResponse.redirect(cleanUrl);
-    setBypassCookie(response, token, secure);
+    setBypassCookie(response, secure);
     return response;
   }
 
-  if (hasValidBypass(request, token)) {
+  if (hasValidBypass(request)) {
     const response = NextResponse.next();
-    setBypassCookie(response, token, secure);
+    setBypassCookie(response, secure);
     return response;
   }
 
